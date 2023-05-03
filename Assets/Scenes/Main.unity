@@ -1972,7 +1972,7 @@ MonoBehaviour:
   cityCount: 5
   cityPrefab: {fileID: 661487568387385763, guid: a6dc63a2ebcf5ae468dcb6477e730064, type: 3}
   pathPrefab: {fileID: 5136262951735584268, guid: 8d2b3e18e83456546a80c39daa939054, type: 3}
-  spawnRange: {x: 10, y: 5}
+  spawnRange: {x: 7.02, y: 5}
   beterDistance: {fileID: 1721067189}
 --- !u!4 &1254836977
 Transform:
@@ -2192,8 +2192,8 @@ Canvas:
   m_GameObject: {fileID: 1389509396}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 519420031}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -2502,8 +2502,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -47.8, y: -0.0000076293945}
-  m_SizeDelta: {x: 54.6542, y: 50}
+  m_AnchoredPosition: {x: -46.209, y: -0.0000076293945}
+  m_SizeDelta: {x: 53.026, y: 50}
   m_Pivot: {x: 0.12855306, y: 0.5}
 --- !u!114 &1721067189
 MonoBehaviour:
