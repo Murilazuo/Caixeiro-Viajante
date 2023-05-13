@@ -9,6 +9,9 @@ public class Manager : MonoBehaviour
     List<City> allCities;
     List<StreetPath> allPaths;
     [SerializeField] int population;
+    [SerializeField] float percentageToDesytoy = .3f;
+    [SerializeField] float percentageToPreserve = .7f;
+    [SerializeField] float mutateAmount;
     [SerializeField] int cityCount;
     [SerializeField] GameObject cityPrefab;
     [SerializeField] GameObject pathPrefab;
@@ -57,9 +60,28 @@ public class Manager : MonoBehaviour
     {
         allPaths = allPaths.OrderBy(x => x.totalDistance).ToList();
 
+        foreach(StreetPath i in allPaths)
+        {
+            print(i.totalDistance);
+        }
+
         allPaths[0].SetBetterPath();
 
         beterDistance.text = allPaths[0].totalDistance.ToString("F");
+    }
+    public void NextGeneration()
+    {
+        for (int i = (int)((float)population * percentageToPreserve); i < (int)((float)population * percentageToDesytoy); i++)
+        {
+            for(int j = 0;j < mutateAmount;j++)
+                allPaths[i].Mutate();
+        }
+        for (int i = (int)((float)population * percentageToDesytoy); i < population; i++)
+        {
+            allPaths[i].Initialize();
+        }
+
+        SelectPaths();
     }
     public City GetCity(int id) => allCities[id];
     public void SetCityNumber(string number)
@@ -71,6 +93,21 @@ public class Manager : MonoBehaviour
     {
         if (number == string.Empty) number = "0";
         population = int.Parse(number);
+    }
+    public void SetMutateAmount(string number)
+    {
+        if (number == string.Empty) number = "1";
+        mutateAmount = int.Parse(number);
+    }
+    public void SetPercentageToDestoy(string number)
+    {
+        if (number == string.Empty) number = "0.1f";
+        percentageToDesytoy = float.Parse(number);
+    }
+    public void SetPercetageToMutate(string number)
+    {
+        if (number == string.Empty) number = "0.5f";
+        percentageToPreserve = float.Parse(number);
     }
     private void OnDrawGizmos()
     {

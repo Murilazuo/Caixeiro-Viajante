@@ -7,6 +7,7 @@ public class StreetPath : MonoBehaviour
     
     [SerializeField] LineRenderer line; 
     [SerializeField] Gradient color; 
+    [SerializeField] Gradient normalColor; 
     [SerializeField] List<int> totalCities;
     [SerializeField] List<int> cityPath;
     public float totalDistance;
@@ -36,6 +37,9 @@ public class StreetPath : MonoBehaviour
     {
         totalCities = new();
 
+        line.colorGradient = normalColor;
+
+
         for (int i = 0; i < Manager.Instance.CityCount; i++)
             totalCities.Add(i);
 
@@ -49,7 +53,20 @@ public class StreetPath : MonoBehaviour
 
         CalculateTotalDistace();
     }
+    public void Mutate()
+    {
+        line.colorGradient = normalColor;
 
+        int indexA = Random.Range(0, Manager.Instance.CityCount);
+        int indexB = Random.Range(0, Manager.Instance.CityCount);
+        while (indexA == indexB) indexB = Random.Range(0, Manager.Instance.CityCount);
+
+        int idA = cityPath[indexA];
+        int idB = cityPath[indexB];
+
+        cityPath[indexA] = idB;
+        cityPath[indexB] = idA;
+    }
     public void Clear()
     {
         totalDistance = 0;
@@ -79,5 +96,22 @@ public class StreetPath : MonoBehaviour
     {
         line.colorGradient = color;
         line.sortingOrder = 1;
+    }
+    private void Start()
+    {
+        SetScale(PathSizeSeter.size);
+    }
+    void SetScale(float size)
+    {
+        line.startWidth = size;
+        line.endWidth = size;
+    }
+    private void OnEnable()
+    {
+        PathSizeSeter.OnSetPathSize += SetScale;
+    }
+    private void OnDisable()
+    {
+        PathSizeSeter.OnSetPathSize -= SetScale;
     }
 }
