@@ -1369,7 +1369,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1254836976}
         m_TargetAssemblyTypeName: Manager, Assembly-CSharp
-        m_MethodName: NextGeneration
+        m_MethodName: ToggleAutoPlay
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1607,7 +1607,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0.000030517578, y: 33.4}
+  m_AnchoredPosition: {x: 0, y: 33.4}
   m_SizeDelta: {x: 130.4, y: 203.3319}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &445834375
@@ -2838,6 +2838,7 @@ GameObject:
   - component: {fileID: 684066598}
   - component: {fileID: 684066597}
   - component: {fileID: 684066596}
+  - component: {fileID: 684066599}
   m_Layer: 5
   m_Name: CityCount
   m_TagString: Untagged
@@ -2927,7 +2928,31 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 684066599}
+        m_TargetAssemblyTypeName: ToPair, Assembly-CSharp
+        m_MethodName: Set
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 684066596}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_InputField, Unity.TextMeshPro
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1254836976}
+        m_TargetAssemblyTypeName: Manager, Assembly-CSharp
+        m_MethodName: SetCityNumber
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -2945,19 +2970,7 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1254836976}
-        m_TargetAssemblyTypeName: Manager, Assembly-CSharp
-        m_MethodName: SetCityNumber
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -3014,6 +3027,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 684066594}
   m_CullTransparentMesh: 1
+--- !u!114 &684066599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 684066594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef2c5792ab3532446919f9222138ef35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &722473898
 GameObject:
   m_ObjectHideFlags: 0
@@ -4009,6 +4034,8 @@ MonoBehaviour:
   pathPrefab: {fileID: 5136262951735584268, guid: 8d2b3e18e83456546a80c39daa939054, type: 3}
   spawnRange: {x: 7.02, y: 5}
   beterDistance: {fileID: 1721067189}
+  autoplayText: {fileID: 926766778}
+  timeToNextGen: 0
 --- !u!4 &1254836977
 Transform:
   m_ObjectHideFlags: 0

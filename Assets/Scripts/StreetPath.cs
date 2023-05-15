@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class StreetPath : MonoBehaviour 
@@ -9,7 +12,7 @@ public class StreetPath : MonoBehaviour
     [SerializeField] Gradient color; 
     [SerializeField] Gradient normalColor; 
     [SerializeField] List<int> totalCities;
-    [SerializeField] List<int> cityPath;
+    public List<int> cityPath;
     public float totalDistance;
     public float TotalDistance { get => totalDistance; }
     public void CalculateTotalDistace()
@@ -53,6 +56,98 @@ public class StreetPath : MonoBehaviour
 
         CalculateTotalDistace();
     }
+    struct DividedStreerPath
+    {
+        List<int> originalPath;
+
+        List<int> part1;
+        List<int> part2;
+
+        int halfCount;
+        bool isPair;
+        int firtHalfCount;
+
+        public DividedStreerPath(List<int> path)
+        {
+            originalPath = path;
+
+            halfCount = originalPath.Count / 2;
+            isPair = originalPath.Count % 2 == 0;
+            firtHalfCount = halfCount + (isPair ? 0 : 1);
+
+            part1 = new List<int>();
+            part2 = new List<int>();
+
+            for (int i = 0; i < path.Count; i++)
+            {
+                if(i < firtHalfCount)
+                {
+                    part1.Add(path[i]);
+                }
+                else
+                    part2.Add(path[i]);
+            }
+        }
+        public List<int> MergedPart
+        {
+            get
+            {
+                List<int> result = new();
+
+                for(int i = 0; i < part1.Count;i++)
+                    result.Add(part1[i]);
+
+                for (int i = 0; i < part2.Count; i++)
+                    result.Add(part2[i]);
+
+                return result;
+            }
+        }
+
+        public void Crossover(DividedStreerPath parent2)
+        {
+
+            part2 = parent2.part2;
+            List<int> indexToChange = new();
+
+            for (int i = 0; i < firtHalfCount; i++)
+            {
+                if (part2.Contains(part1[i]))
+                {
+                    indexToChange.Add(i);
+                    part1[i] = -1;
+                }
+            }
+
+
+            List<int> mergedPath = new(MergedPart);
+            List<int> remainingNumbers = new(originalPath);
+
+            foreach(int i in mergedPath)
+                if (i != -1)
+                    remainingNumbers.Remove(i);
+
+            foreach(int i in indexToChange)
+            {
+                part1[i] = remainingNumbers[0];
+                remainingNumbers.RemoveAt(0);
+                remainingNumbers.TrimExcess();
+            }
+
+        }
+
+    }
+
+    public void Crossover(List<int> parent1, List<int> parent2)
+    {
+        
+        DividedStreerPath path1 = new(parent1);
+        DividedStreerPath path2 = new(parent2);
+        path1.Crossover(path2);
+
+        cityPath = path1.MergedPart;
+    }
+
     public void Mutate()
     {
         line.colorGradient = normalColor;
@@ -71,6 +166,11 @@ public class StreetPath : MonoBehaviour
     {
         totalDistance = 0;
         cityPath = new();
+    }
+    public void ClearColor()
+    {
+        line.sortingOrder = 0;
+        line.colorGradient = normalColor;
     }
 
     void GenerateRandomPath()
@@ -113,5 +213,15 @@ public class StreetPath : MonoBehaviour
     private void OnDisable()
     {
         PathSizeSeter.OnSetPathSize -= SetScale;
+    }
+
+    public static string PrintPath(List<int> path)
+    {
+        string result = "";
+
+        for (int i = 0; i < path.Count; i++)
+            result += "| " + path[i] + " |";
+
+        return result;
     }
 }

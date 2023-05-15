@@ -17,6 +17,8 @@ public class Manager : MonoBehaviour
     [SerializeField] GameObject pathPrefab;
     [SerializeField] Vector2 spawnRange;
     [SerializeField] TMP_Text beterDistance;
+
+    [SerializeField] TMP_Text autoplayText;
     public int CityCount { get => cityCount; }
 
     public static Manager Instance;
@@ -26,6 +28,13 @@ public class Manager : MonoBehaviour
         Instance = this;
         allCities = new();
         allPaths = new();
+    }
+    void ClearPathColor()
+    {
+        foreach(StreetPath path in allPaths)
+        {
+            path.ClearColor();
+        }
     }
     public void GenerateCity()
     {
@@ -58,12 +67,15 @@ public class Manager : MonoBehaviour
 
     void SelectPaths()
     {
-        allPaths = allPaths.OrderBy(x => x.totalDistance).ToList();
+        ClearPathColor();
 
+        allPaths = allPaths.OrderBy(x => x.totalDistance).ToList();
+        /*
         foreach(StreetPath i in allPaths)
         {
             print(i.totalDistance);
         }
+        */
 
         allPaths[0].SetBetterPath();
 
@@ -71,6 +83,44 @@ public class Manager : MonoBehaviour
     }
     public void NextGeneration()
     {
+        List<int>[] paths = new List<int>[allPaths.Count];
+
+        for (int i = 0; i < allPaths.Count; i++)
+        {
+            paths[i] = new List<int>(allPaths[i].cityPath);
+        }
+
+        int[] quarters = new int[3];
+        quarters[0] = allPaths.Count / 4;
+        quarters[1] = quarters[0] * 2;
+        quarters[2] = quarters[0] * 3;
+
+        for(int i = 0; i < allPaths.Count; i++)
+        {
+            if(i > quarters[2])
+            {
+                allPaths[i].Initialize();
+            }
+            else if (i > 0)
+            {
+                int parent1Id = Random.Range(0,quarters[1]);
+                int parent2Id = Random.Range(0,quarters[1]);
+            
+                while(parent1Id == parent2Id)
+                    parent2Id = Random.Range(0, quarters[1]);
+
+                allPaths[i].Crossover(paths[parent1Id], paths[parent2Id]);
+
+                if(Random.Range(0,10) <= 1)
+                {
+                    allPaths[i].Mutate();
+                    
+                    if (Random.Range(0, 10) <= 1)
+                        allPaths[i].Mutate();
+                }
+            }
+        }
+        /*
         for (int i = (int)((float)population * percentageToPreserve); i < (int)((float)population * percentageToDesytoy); i++)
         {
             for(int j = 0;j < mutateAmount;j++)
@@ -80,7 +130,7 @@ public class Manager : MonoBehaviour
         {
             allPaths[i].Initialize();
         }
-
+        */
         SelectPaths();
     }
     public City GetCity(int id) => allCities[id];
@@ -120,5 +170,26 @@ public class Manager : MonoBehaviour
         result.y = Random.Range(-spawnRange.y, spawnRange.y);
         
         return result;
+    }
+    bool isPlay;
+    public void ToggleAutoPlay()
+    {
+        isPlay = !isPlay;
+
+        if (isPlay)
+            StartCoroutine(nameof(AutoPlay));
+        else
+            StopCoroutine(nameof(AutoPlay));
+        
+        autoplayText.text = isPlay ? "Stop" : "Autoplay";
+    }
+    [SerializeField] float timeToNextGen;
+    IEnumerator AutoPlay()
+    {
+        while (isPlay)
+        {
+            NextGeneration();
+            yield return new WaitForEndOfFrame();
+        }
     }
 }
