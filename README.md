@@ -26,6 +26,6 @@ Instancia as cidade e estradas e controla a população e as gerações.
 GenerateCity() Destroi as cidade e intancia um numero de cidade de acordo com a UI e em posições aleatórias.
 GeneratePath() Destroi os caminhos existentes e Instancia e inicializa um numero de caminhos equivalentes a UI.
 SelectPaths() Organiza os caminhos do caminho mais curto ao maior
-NextGeneration() Divide os caminho em 4 quartos, o último quarto (caminhos mais longos) são inicializados novamente, o primeiro e    mantido (melhor caminho) é mantido, o restante dos caminhos sofre crossover entre si, contando com o primeiro.
+NextGeneration() Divide os caminho em 4 quartos, o último quarto (caminhos mais longos) são inicializados novamente, o primeiro e    mantido (melhor caminho) é mantido, o restante dos caminhos sofre crossover entre si, contando com o primeiro. possui uma change de sobrer uma mutação chamando Mutate do caminho.
 AutoPlay() Chama NextGeneration a cada frame
  
